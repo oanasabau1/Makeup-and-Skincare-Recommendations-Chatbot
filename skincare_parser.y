@@ -256,6 +256,8 @@ char skin_type[50];
 char skin_concerns[50];
 char ingredients[50];
 char product_type[50];
+int final_state = 0;
+int e = 0;
 
 char makeup_type[50];
 char makeup_price[50];
@@ -273,10 +275,11 @@ void ask_type_of_makeup_product();
 void ask_price();
 void ask_makeup_type();
 void final();
+void error();
 
 %}
 
-%token OILY DRY COMBINATION ACNE WRINKLES DRYNESS SENSITIVITY HYALURONIC_ACID SALICYLIC_ACID RETINOL VITAMIN_C END CLEANSER TONER SERUM MASK LIP_BALM SUNSCREEN MOISTURIZER NON ROUTINE DRUGSTORE HIGHEND DAILY EVENT YES NO FOUNDATION CONCEALER LIP_OIL LIPSTICK EYE_SHADOW BLUSH BRONZER FULL
+%token OILY DRY COMBINATION ACNE WRINKLES DRYNESS SENSITIVITY HYALURONIC_ACID SALICYLIC_ACID RETINOL VITAMIN_C END CLEANSER TONER SERUM MASK LIP_BALM SUNSCREEN MOISTURIZER NON ROUTINE DRUGSTORE HIGHEND DAILY EVENT YES NO FOUNDATION CONCEALER LIP_OIL LIPSTICK EYE_SHADOW BLUSH BRONZER FULL 
 
 %%
 
@@ -293,6 +296,7 @@ query : skin_type_query
       | makeup_type_query
       | makeup_type_of_product_query
       ;
+      
 
 skin_type_query : OILY END { 
     strcpy(skin_type, "oily");
@@ -443,21 +447,30 @@ makeup_type_of_product_query: FOUNDATION END{
 
 %%
 
-void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+void yyerror(const char *s) {  
+    error();
+}
+
+void error(){
+   printf("Invalid input! Please try again!\n");  
+   e = 1;
+   return;
 }
 
 void ask_skin_type() {
+    e = 0;
     printf("What is your skin type? (oily, dry, combination)\n");
     state = 1;
 }
 
 void ask_skin_concerns() {
+    e = 0;
     printf("What are your skin concerns? (acne, wrinkles, dryness, sensitivity)\n");
     state = 2;
 }
 
 void ask_ingredients() {
+    e = 0;
     printf("What ingredients do you prefer? (hyaluronic acid, salicylic acid, retinol, vitamin C)\n");
     state = 3;
 }
@@ -469,28 +482,29 @@ void ask_types() {
 
 void makeup_pr(){
     printf("Do you want a recomandation for a makeup product?\n");
-    state = 5;
+    state = 6;
 }
 
 void final(){
     printf("We hope we have helped you in choosing the products! See you next time!\n");
+    final_state = 1;
     return;
 }
 
 
 void ask_makeup_type(){
     printf("What type of makeup are you looking for? (daily or event)\n");
-    state = 6;
+    state = 7;
 }
 
 void ask_price(){
     printf("Are you looking for a drugstore or a highend product? (drugstore (cheap) or highend (expensive))\n");
-    state = 7;
+    state = 8;
 }
 
 void ask_type_of_makeup_product(){
     printf("What type of makeup product are you looking for? (full face, foundation, concealer, blush, bronzer, lip oil, lipstik, eye shadow)\n");
-    state = 8;
+    state = 9;
 }
 
 void make_recommendation() {
@@ -560,7 +574,6 @@ void make_recommendation() {
     	}
     	//return;
     	
-    	
     }
     else
        printf("No suitable product found.\n");
@@ -569,7 +582,7 @@ void make_recommendation() {
     //exit(0);
 }
 
-void make_recommendation_makeup() {
+void make_recommendation_makeup(int verify) {
     printf("Finding recommendation: %s %s %s\n", makeup_event, makeup_price, makeup_type); 
     int foundation = 0, concealer = 0, blush = 0, bronzer = 0, eye_shadow = 0, lipstick = 0, lipoil = 0; 
     int ok = 0;
@@ -643,6 +656,7 @@ void make_recommendation_makeup() {
     }  else{ 
     printf("No suitable makeup product found.\n");
     }
+    final_state = 1;
     exit(0);
 }
 
@@ -650,7 +664,47 @@ void make_recommendation_makeup() {
 int main() {
     init_products();
     init_makeup();
-    ask_skin_type();
-    yyparse();
+     while (final_state == 0) {
+      if(state == 0 && e == 0){
+    	ask_skin_type();
+    	e = 0;
+    	}
+      if(state == 1 && e == 1){
+        memset(skin_type, 0, sizeof(skin_type));
+    	ask_skin_type();
+    	e =0;
+     } else if(state == 2 && e == 1){
+        memset(skin_concerns, 0, sizeof(skin_concerns));
+    	ask_skin_concerns();
+    	e = 0;
+     } else if(state == 3 && e == 1){
+        memset(ingredients, 0, sizeof(ingredients));
+    	ask_ingredients();
+    	e = 0;
+     } else if(state == 4 && e == 1){
+        memset(product_type, 0, sizeof(product_type));
+    	ask_types();
+    	e = 0;
+     }  else if(state == 5 && e == 1){
+    	make_recommendation();
+    	e = 0;
+     }  else if(state == 6 && e == 1){
+    	makeup_pr();
+    	e = 0;
+     }  else if(state == 7 && e == 1){
+        memset(makeup_event, 0, sizeof(makeup_event));
+    	ask_makeup_type();
+    	e = 0;
+     }  else if(state == 8 && e == 1){
+        memset(makeup_price, 0, sizeof(makeup_price));
+    	ask_price();
+    	e = 0;
+     }  else if(state == 9 && e == 1){
+         memset(makeup_type, 0, sizeof(makeup_type));
+    	ask_type_of_makeup_product();
+    	e = 0;
+     }  
+        yyparse();
+    }
     return 0;
 }

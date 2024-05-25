@@ -1,7 +1,7 @@
 %{
 #include "y.tab.h"
 %}
-
+alpha [A-Za-z]
 %%
 [oO]ily { return OILY; }
 [dD]ry { return DRY; }
@@ -15,29 +15,28 @@ _ { return NON; }
 [sS]alicylic[ \t]*acid { return SALICYLIC_ACID; }
 [rR]etinol { return RETINOL; }
 [vV]itamin[ \t]*C { return VITAMIN_C; }
-[cC]leanser { return CLEANSER; }
-[tT]oner { return TONER; }
-[sS]erum { return SERUM; }
+[Cc]leanser { return CLEANSER; }
+[Tt]oner { return TONER; }
+[Ss]erum { return SERUM; }
 [sS]unscreen {return SUNSCREEN; }
 [lL]ip[ \t]balm { return LIP_BALM;}
 [mM]oisturizer { return MOISTURIZER; }
-[mM]ask { return MASK; }
-[rR]outine { return ROUTINE; }
-[fF]ull[ \t]face { return FULL; }
-[yY]es { return YES; }
-[nN]o { return NO; }
-[dD]aily { return DAILY; }
-[eE]vent { return EVENT; }
+[Mm]ask { return MASK; }
+[Rr]outine { return ROUTINE; }
+[Ff]ull[ \t]face { return FULL; }
+[Yy]es { return YES; }
+[Nn]o { return NO; }
+[Dd]aily { return DAILY; }
+[Ee]vent { return EVENT; }
 [dD]rugstore { return DRUGSTORE; }
-[hH]ighend { return HIGHEND; }
+[Hh]ighend { return HIGHEND; }
 [fF]oundation { return FOUNDATION; }
 [cC]oncealer {return CONCEALER; }
-[bB]lush { return BLUSH; }
-[bB]ronzer { return BRONZER; }
-[lL]ip[ \t]oil {return LIP_OIL; }
+[Bb]lush { return BLUSH; }
+[Bb]ronzer { return BRONZER; }
+[Ll]ip[ \t]oil {return LIP_OIL; }
 [lL]ipstick { return LIPSTICK; }
 [eE]ye[ \t]shadow { return EYE_SHADOW; }
 [\.\n\?!] { return END; }
-. { return yytext[0]; }
+[.]* { return yytext[0]; }
 %%
-
