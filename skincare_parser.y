@@ -62,10 +62,6 @@ void init_makeup() {
     add_makeup("Dream Matte Blush by Maybelline", "drugstore", "daily", "blush");
     add_makeup("Orgasm Blush by NARS", "highend", "event", "blush");
 
-    // Bronzer
-    add_makeup("Butter Bronzer by Physicians Formula", "drugstore", "daily", "bronzer");
-    add_makeup("Hoola Matte Bronzer by Benefit Cosmetics", "highend", "event", "bronzer");
-
     // Lip Oil
     add_makeup("Lifter Gloss by Maybelline", "drugstore", "daily", "lip oil");
     add_makeup("Lip Glow Oil by Dior", "highend", "event", "lip oil");
@@ -78,21 +74,17 @@ void init_makeup() {
     add_makeup("Nudes of New York Eyeshadow Palette by Maybelline", "drugstore", "daily", "eye shadow");
     add_makeup("Naked Palette by Urban Decay", "highend", "event", "eye shadow");
 
-    // Blush (additional daily and event)
-    add_makeup("Cheek Heat Gel-Cream Blush by Maybelline", "drugstore", "daily", "blush");
-    add_makeup("Ambient Lighting Blush by Hourglass", "highend", "event", "blush");
-
     // Bronzer (additional daily and event)
     add_makeup("Matte Bronzing Powder by NYX", "drugstore", "daily", "bronzer");
     add_makeup("Les Beiges Healthy Glow Bronzing Cream by Chanel", "highend", "event", "bronzer");
 
     // Lip Oil (additional daily and event)
-    add_makeup("Hydrating Lip Oil by Burt's Bees", "drugstore", "daily", "lip oil");
-    add_makeup("Tinted Lip Oil by Bobbi Brown", "highend", "event", "lip oil");
+    add_makeup("Hydrating Lip Oil by Burt's Bees", "drugstore", "event", "lip oil");
+    add_makeup("Tinted Lip Oil by Bobbi Brown", "highend", "daily", "lip oil");
 
     // Lipstick (additional daily and event)
-    add_makeup("Superstay Matte Ink by Maybelline", "drugstore", "daily", "lipstick");
-    add_makeup("Matte Revolution Lipstick by Charlotte Tilbury", "highend", "event", "lipstick");
+    add_makeup("Superstay Matte Ink by Maybelline", "drugstore", "event", "lipstick");
+    add_makeup("Matte Revolution Lipstick by Charlotte Tilbury", "highend", "daily", "lipstick");
 
     // Eye Shadow (additional daily and event)
     add_makeup("The City Mini Eyeshadow Palette by Maybelline", "drugstore", "daily", "eye shadow");
@@ -424,7 +416,7 @@ makeup_type_of_product_query: FOUNDATION END{
     make_recommendation_makeup();
 }
      | BRONZER END {
-    strcpy(makeup_type, "sunscreen");
+    strcpy(makeup_type, "bronzer");
     make_recommendation_makeup();
 }
      | LIP_OIL END {
@@ -452,7 +444,7 @@ void yyerror(const char *s) {
 }
 
 void error(){
-   printf("Invalid input! Please try again!\n");  
+   printf(" - invalid input! Please try again!\n");  
    e = 1;
    return;
 }
@@ -503,7 +495,7 @@ void ask_price(){
 }
 
 void ask_type_of_makeup_product(){
-    printf("What type of makeup product are you looking for? (full face, foundation, concealer, blush, bronzer, lip oil, lipstik, eye shadow)\n");
+    printf("What type of makeup product are you looking for? (full face, foundation, concealer, blush, bronzer, lip oil, lipstick, eye shadow)\n");
     state = 9;
 }
 
